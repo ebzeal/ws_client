@@ -1,10 +1,33 @@
 .App {
   text-align: center;
+  margin: 20% 0;
 }
 
 .App-logo {
   height: 40vmin;
   pointer-events: none;
+}
+
+input {
+  padding: 7px;
+  width: 20%;
+  border:darkgrey solid 1px;
+  border-radius: 5px;
+}
+
+ul {
+  width: 60%;
+  margin: 5% 20%;
+}
+
+li {
+  text-align: left;
+  margin-top: 20px;
+}
+
+span {
+  font-style: italic;
+  font-size: 12px;
 }
 
 @media (prefers-reduced-motion: no-preference) {
