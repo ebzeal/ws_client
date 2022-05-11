@@ -8,23 +8,27 @@ function App() {
     clientId: '',
     message: '',
   });
-  const socket = useMemo(()=> io("ws://localhost:3001"), []);
+  const [room, setRoom] = useState("")
+  console.log("🚀 ~ file: App.js ~ line 12 ~ App ~ room", room)
+  const socket = useMemo(()=> io("ws://localhost:3001/livestream"), []);
 
   useEffect(()=>{
+    socket.emit('joinRoom', room)
     socket.on("msgToClient", data => {
     console.log("🚀 ~ file: App.js ~ line 22 ~ useEffect ~ data", data)
       setMessages([...messages, data])
     });
-  }, [socket, messages]);
+  }, [socket, messages, room]);
 
 
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log(values);
     const data = {
-      text: values.message,
-      id:   values.clientId,
-      date: Date.now()
+      message: values.message,
+      sender:   values.clientId,
+      date: Date.now(),
+      room 
     }
     socket.emit('msgToServer', data)
   };
@@ -39,6 +43,11 @@ function App() {
   console.log("🚀 ~ file: App.js ~ line 7 ~ App ~ messages", messages)
   return (
     <div className="App">
+      <div className='buttonDiv'>
+        <button onClick={()=>setRoom("episode1")}>Episode 1</button>
+        <button  onClick={()=>setRoom("episode2")}>Episode 2</button>
+        <button  onClick={()=>setRoom("episode3")}>Episode 3</button>
+      </div>
       
       <form onSubmit={handleSubmit}>
         <div>
@@ -65,9 +74,9 @@ function App() {
       <ul>
         {messages.map(message=>{
         console.log("🚀 ~ file: App.js ~ line 72 ~ App ~ message", message)
-        return <li id={messages.indexOf(message)}>
-          <span>userId:</span>  {message["id"]} <br></br>
-          <span>message:</span> {message["text"]} <br></br>
+        return <li key={messages.indexOf(message)}>
+          <span>userId:</span>  {message["sender"]} <br></br>
+          <span>message:</span> {message["message"]} <br></br>
          <span>time:</span> {message["date"]} <br></br>
           </li>})}
       </ul>
